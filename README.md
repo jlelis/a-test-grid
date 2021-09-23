@@ -24,5 +24,9 @@
 <img src="prints/006.png">
 </p>
 
+<p align="center">
+<img src="prints/add_remove_.png">
+</p>
+
 
 <p>End.</p>

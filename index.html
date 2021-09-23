@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" type="text/css" href="codebase/dhtmlxgrid.css">
+  <link rel="stylesheet" type="text/css" href="codebase/skins/dhtmlxgrid_dhx_skyblue.css">
+  <!--css custom-->
+  <link rel="stylesheet" href="style.css">
+
+  <script src="codebase/dhtmlxcommon.js"></script>
+  <script src="codebase/dhtmlxgrid.js"></script>
+  <script src="codebase/dhtmlxgridcell.js"></script>
+
+
+  <script>
+    var myGrid, myDataProcessor;
+
+    function doOnLoad() {
+
+      myGrid = new dhtmlXGridObject('gridbox');//creates a grid instance
+      myGrid.setImagePath("codebase/imgs/");//sets the path to the grid images
+      myGrid.setHeader("Id,Nome,Valor");//sets the headers of the columns
+      // myGrid.setSizes();
+
+      myGrid.setInitWidths("100,*,200");//sets the width of the columns; '*' makes the column fill all the remaining space
+      myGrid.setColAlign("center,right,left");//sets the horizontal alignment in the columns
+      myGrid.setSkin("dhx_skyblue");//sets the skin of the grid
+      myGrid.setColSorting("str,int,na");//sets the sorting types of the columns
+      myGrid.setColTypes("ro,ed,price");//sets the types of cells in the columns
+
+      myGrid.init();//initializes the grid
+
+      //load from DB
+      myGrid.load("connector.php");//populates the grid with the data
+
+      myDataProcessor = new dataProcessor("connector.php");
+
+      myDataProcessor.init(myGrid);
+    }
+
+    function addUser() {
+      //validation with values not null
+      var ind1 = window.prompt('Digite o Código ID:', '');
+      if (ind1 === "" || ind1 === null || typeof ind1 == "undefined") return;
+      var ind2 = window.prompt('Digite o Nome:', '');
+      if (ind2 === "" || ind2 === null || typeof ind2 == "undefined") return;
+      var ind3 = window.prompt('Digite o Valor:', '');
+      if (ind3 === "" || ind3 === null || typeof ind3 == "undefined") return;
+      //send first position
+      myGrid.addRow(myGrid.uid(), [ind1, ind2, ind3], 0);
+
+    }
+    // removes the selected row from the grid
+    function removeUser() {
+
+      var selId = myGrid.getSelectedId();//gets the Id of the selected row
+      // alert(selId);
+      if (selId !== null) {
+        var x = confirm("Tem certeza de que deseja excluir?");
+        if (x) {
+          myGrid.deleteRow(selId);
+        }
+        else {
+          return false;
+        }
+      }
+    }
+  </script>
+</head>
+
+<body onload="doOnLoad()">
+  <div class="container">
+    <div class="box">
+
+      <div id="gridbox" class="grid"></div>
+
+      <button onclick="addUser()">Add User</button>
+      <button onclick="removeUser()">Remove User</button>
+    </div>
+  </div>
+</body>
+
+</html>
